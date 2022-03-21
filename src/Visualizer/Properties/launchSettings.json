@@ -1,0 +1,18 @@
+﻿{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Visualizer": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:5001",
+      "environmentVariables": {
+        "PlayerName": "Maksad",
+        "GameServer": "http://localhost:5000",
+        "ClientCallbackAddress": "http://localhost:5001",
+        "secretCode": "BazookaJoe",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5001"
+    }
+  }
+}

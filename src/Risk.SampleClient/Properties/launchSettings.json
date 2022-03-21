@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Risk.SampleClient": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "launchUrl": "",
+      "applicationUrl": "http://localhost:5004",
+      "environmentVariables": {
+        "GameServer": "http://localhost:5000",
+        "ClientCallbackAddress": "http://localhost:5004",
+        "PlayerName": "SampleClient1",
+        "joinGame": "yes",
+        "secretCode": "BazookaJoe"
+      }
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "publishAllPorts": true
+    }
+
+  }
+}
