@@ -31,7 +31,7 @@ namespace Risk.Api
 
         public async Task StartGameAsync()
         {
-            //game.TakeGameSnapshot("Game start!");
+            game.TakeGameSnapshot("Game start!");
 
             await deployArmiesAsync();
             await doBattle();
@@ -63,8 +63,10 @@ namespace Risk.Api
                         }
                     }
 
+                    var message = $"{currentPlayer.Name}  deployed to {deployArmyResponse.DesiredLocation}";
+
                     //Record the GameStatus****************************
-                    //game.TakeGameSnapshot(message);
+                    game.TakeGameSnapshot(message);
                 }
             }
         }
@@ -89,6 +91,8 @@ namespace Risk.Api
         private async Task doBattle()
         {
             game.StartTime = DateTime.Now;
+            string message;
+
             while (game.Players.Count() > 1 && game.GameState == GameState.Attacking && game.Players.Any(p => game.PlayerCanAttack(p)))
             {
 
@@ -111,8 +115,12 @@ namespace Risk.Api
                                 attackingTerritory = game.Board.GetTerritory(beginAttackResponse.From);
                                 defendingTerritory = game.Board.GetTerritory(beginAttackResponse.To);
 
+                                message = $"{currentPlayer.Name} attacked from {attackingTerritory} to {defendingTerritory}";
 
                                 attackResult = game.TryAttack(currentPlayer.Token, attackingTerritory, defendingTerritory);
+
+                                //Record the Game Status *****************************
+                                game.TakeGameSnapshot(message);
                             }
                             catch (Exception ex)
                             {
@@ -120,6 +128,9 @@ namespace Risk.Api
                             }
                             if (attackResult.AttackInvalid)
                             {
+                                message = ($"Invalid attack request! {currentPlayer.Name} from {attackingTerritory} to {defendingTerritory} ");
+                                game.TakeGameSnapshot(message);
+
                                 failedTries++;
                                 if (failedTries == MaxFailedTries)
                                 {
@@ -145,19 +156,25 @@ namespace Risk.Api
                     }
                     else
                     {
+                        message = ($"{currentPlayer.Name} cannot attack.");
+                        game.TakeGameSnapshot(message);
+
                     }
                 }
 
 
             }
             game.SetGameOver();
+            message = "Game Over";
+            game.TakeGameSnapshot(message);
         }
         private void RemovePlayerFromGame(string token)
         {
             var player = game.RemovePlayerByToken(token) as ApiPlayer;
             removedPlayers.Add(player);
 
-            //game.TakeGameSnapshot(message);
+            var message = ($"{player.Name} was removed from game");
+            game.TakeGameSnapshot(message);
         }
 
         private async Task<BeginAttackResponse> askForAttackLocationAsync(ApiPlayer player, BeginAttackStatus beginAttackStatus)
@@ -241,7 +258,8 @@ namespace Risk.Api
             RemovePlayerFromBoard(player.Token);
             RemovePlayerFromGame(player.Token);
 
-            //game.TakeGameSnapshot(message);
+            var message = $"{player.Name} was booted from the game! BYE...";
+            game.TakeGameSnapshot(message);
         }
         
     }

@@ -116,7 +116,7 @@ namespace Visualizer.Pages
                 HttpContext.Session.SetInt32(ListIndex, CurrentIndex);
             }
 
-            return RedirectToPage("Index");
+            return RedirectToPage();
         }
 
     }

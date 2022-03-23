@@ -102,7 +102,7 @@
         <tr>
             @for (var col = 0; col <= Model.MaxCol; col++)
             {
-                var cell = Model.Status.Board.First(t => t.Location == new Location(row, col));
+                var cell = Model.CurrentStatus.Board.First(t => t.Location == new Location(row, col));
                 var style =  string.IsNullOrEmpty(cell.OwnerName)
                     ? string.Empty
                     : $"style=background-color:{Html.Raw(Model.ColorGenerator.GetColor(cell.OwnerName))}";
