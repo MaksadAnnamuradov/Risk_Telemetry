@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Risk.Api.Controllers;
 using Risk.Game;
 using Risk.Shared;
+using Serilog;
 
 namespace Risk.Api
 {
@@ -52,7 +53,7 @@ namespace Risk.Api
             }
 
             app.UseRouting();
-
+            app.UseSerilogRequestLogging();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

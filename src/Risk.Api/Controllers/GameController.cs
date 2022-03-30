@@ -11,6 +11,7 @@ using FluentAssertions.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Risk.Shared;
 
 namespace Risk.Api.Controllers
@@ -24,13 +25,15 @@ namespace Risk.Api.Controllers
         private IMemoryCache memoryCache;
         private readonly IHttpClientFactory clientFactory;
         private readonly IConfiguration config;
+        private readonly ILogger<GameRunner> logger;
         private readonly List<ApiPlayer> removedPlayers = new List<ApiPlayer>();
 
-        public GameController(Game.Game game, IMemoryCache memoryCache, IHttpClientFactory client, IConfiguration config)
+        public GameController(Game.Game game, IMemoryCache memoryCache, IHttpClientFactory client, IConfiguration config, ILogger<GameRunner> logger)
         {
             this.game = game;
             this.clientFactory = client;
             this.config = config;
+            this.logger = logger;
             this.memoryCache = memoryCache;
         }
 
@@ -128,7 +131,7 @@ namespace Risk.Api.Controllers
                 return BadRequest("Secret code doesn't match, unable to start game.");
             }
             game.StartGame();
-            var gameRunner = new GameRunner(game);
+            var gameRunner = new GameRunner(game, logger);
             await gameRunner.StartGameAsync();
 
             GameOverRequest gameOverRequest = await gameRunner.reportWinner();
